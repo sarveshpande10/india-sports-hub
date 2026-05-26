@@ -25,12 +25,12 @@ const Latest = ({ latestArticles, latestSport, setLatestSport }) => {
 
     return (
         <>
-            <div className="outer" style={{marginBottom: "200px"}}>
-                <h2>Latest</h2>
+            <div className="outer">
+                <h2 className="section-heading">Latest</h2>
                 <div className="select-sports">
                     <ul className>
                         { sports.map((sport) => (
-                            <li key={sport} onClick={() => setLatestSport(sport === "All Sports" ? "all" : sport.toLowerCase())}>{sport}</li>
+                            <li key={sport} id={(sport === "All Sports" && latestSport === "all") || sport.toLowerCase() === latestSport ? "active-latest-sport" : ""} onClick={() => setLatestSport(sport === "All Sports" ? "all" : sport.toLowerCase())}>{sport}</li>
                           ))
                         }
                     </ul>
@@ -50,10 +50,10 @@ const Latest = ({ latestArticles, latestSport, setLatestSport }) => {
                                         {latestArticles.slice(1, 4).map((article) => (
                                             <li key={article.id}>
                                                 <div className="upper-box">
-                                                <p>{article.category}</p>
-                                                <p className="datetime">{getFormattedDate(article.date)}</p>
+                                                    <p>{article.category}</p>
+                                                    <p className="datetime">{getFormattedDate(article.date)}</p>
                                                 </div>
-                                                <h3>{article.title}</h3>
+                                                <h3>{article.title.length > 105 ? article.title.slice(0, 105) + "..." : article.title}</h3>
                                             </li>
                                         ))}
 

@@ -1,10 +1,11 @@
-import articlesData from './data'
+import { articlesData, videos } from './data'
 import Layout from './Layout'
 import TopArticles from './TopArticles'
 import Trending from './Trending'
 import Latest from './Latest'
 import ArticlesBySport from './ArticlesBySport'
 import ScrollToTop from './ScrollToTop'
+import ExploreVideos from './ExploreVideos'
 import { useState, useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import './App.css'
@@ -19,6 +20,8 @@ function App() {
   const [latestSport, setLatestSport] = useState("all")
   const [isSearching, setIsSearching] = useState(false)
   const [searchValue, setSearchValue] = useState('')
+  const [activeSectionId, setActiveSectionId] = useState("home")
+
 
   const sports = [
             { id: 1, name: "Cricket" },
@@ -118,6 +121,7 @@ function App() {
 
   return (
     <>
+
       <ScrollToTop />
       <Routes>
         <Route path='/' element={
@@ -129,6 +133,8 @@ function App() {
             searchValue={searchValue} 
             setSearchValue={setSearchValue} 
             data={data.filter((article) => article.title.toLowerCase().includes(searchValue.toLowerCase()))}
+            activeSectionId={activeSectionId} 
+            setActiveSectionId={setActiveSectionId} 
           />}
         >
           <Route index element={
@@ -145,6 +151,7 @@ function App() {
                         setLatestSport={setLatestSport}
                     />
               }
+              <ExploreVideos videos={videos} />
             </>
           }/>
 

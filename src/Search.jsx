@@ -51,7 +51,7 @@ const Search = ({ isSearching, setIsSearching, searchValue, setSearchValue, data
                         }>{article.category}</p>
                         <p className="datetime" style={{fontWeight: "300"}}>{getFormattedDate(article.date)}</p>
                       </div>
-                      <h3>{article.title}</h3>
+                      <h3>{article.title.length >= 92 ? article.title.slice(0, 92) + "..." : article.title}</h3>
                   </li>
               ))}
               </ul>

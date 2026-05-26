@@ -11,7 +11,16 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Segoe UI',Tahoma, Geneva, Verdana, sans-serif;
-  background-color: rgb(0, 0, 0);
+  /* background-color: rgb(0, 0, 0); */
+  background:
+    radial-gradient(circle at top left, rgba(0,100,255,0.15), transparent 30%),
+    radial-gradient(circle at bottom right, rgba(255,80,80,0.12), transparent 30%),
+    #000;
+    background-image:
+  linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+  linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+
+background-size: 40px 40px;
   color: rgb(252, 249, 249);
 }
 .header {
@@ -49,18 +58,18 @@ nav > ul {
 
 nav > ul > li {
   cursor: pointer;
-  padding: 4px 12px;
-  border-radius: 4px;
+  padding: 4px 8px;
   list-style: none;
   display: flex;
   align-items: center;
-  width: max-content;
+  width: auto;
   position: relative;
-  border-radius: 30px;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+  /* background-color: red; */
 }
 
 nav > ul > li:hover {
-  background-color: rgba(128, 128, 184, 0.2);
+  background-color: rgba(128, 128, 184, 0.1);
 }
 
 nav > ul > li:hover svg {
@@ -163,7 +172,7 @@ nav > ul > li:hover svg {
   /* background-color: green; */
   margin: 10px;
   overflow: hidden;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 
@@ -179,6 +188,11 @@ nav > ul > li:hover svg {
   font-weight: 600;
   text-shadow: 0 2px 8px rgba(0,0,0,0.5);
   /* line-height: 20px; */
+}
+
+#active-section {
+  /* background-color: rgba(136, 130, 181, 0.2); */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.8);
 }
 
 
@@ -241,17 +255,17 @@ nav > ul > li:hover svg {
   font-size: 12px;
 }
 
-#trending-header {
+.section-heading {
   /* background-color: red; */
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-size: xx-large;
   border-bottom: 1px solid rgb(236, 135, 45);
   margin-bottom: 3rem;
-  padding-bottom: 10px;
+  padding-bottom: 3px;
 }
 
 .select-sports {
-  margin-top: 3rem;
+  /* margin-top: 3rem; */
   width: 100%;
 }
 
@@ -264,6 +278,16 @@ nav > ul > li:hover svg {
 
 .select-sports ul li {
   cursor: pointer;
+  padding: 10px;
+
+}
+
+.select-sports ul li:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+#active-latest-sport {
+  border-bottom: 1px solid rgba(255,255,255,0.8);
 }
 
 
@@ -301,7 +325,7 @@ nav > ul > li:hover svg {
 }
 
 .other-articles ul li {
-  height: 6rem;
+  height: 7rem;
   background-color: #081b29;
   border: 1px solid white;
   border-radius: 15px;
@@ -309,6 +333,8 @@ nav > ul > li:hover svg {
   padding: 15px;
   cursor: pointer;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
+  overflow: hidden;
+  /* background-color: red; */
   /* margin: 30px 0; */
 }
 
@@ -395,4 +421,43 @@ a{
 
 .upper-box p:first-child {
   color: white;
+}
+
+.video-content {
+  /* background-color: red; */
+  width: 63rem;
+  display: flex;
+  justify-content: center;
+  /* margin-top: 5rem; */
+}
+
+.video-content ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 50px;
+  /* background-color: yellow; */
+  padding: 0;
+  justify-content: center;
+  align-items: center;
+  /* margin: 0; */
+}
+
+iframe {
+  /* background-color: orange; */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin: 0;
+  padding: 0;
+  display: block;
+  border-radius: 10px;
+  box-shadow: 0 1px 6px white;
+  transition: 0.5s;
+}
+
+iframe:hover {
+  translate: 0 -7px;
+}
+
+.video-content ul li {
+  /* background-color: pink; */
+  /* border: 1px solid black; */
 }

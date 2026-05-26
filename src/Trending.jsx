@@ -12,7 +12,7 @@ const Trending = ({ article }) => {
   return (
     <>
         <div className="outer">
-            <p id="trending-header">Trending</p>
+            <h2 className="section-heading">Trending</h2>
             <div className="articles">
                 <p className="datetime">{getFormattedDate(article.date)}</p>
                 <h2>{article.title}</h2>

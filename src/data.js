@@ -41,4 +41,41 @@ const articlesData = [
     }
 ]
 
-export default articlesData
+const videos = [
+    {
+        id: 1,
+        link: "https://www.youtube.com/embed/5EYQIpDHl2Q?si=5IByNbDoj1VKs2Xn"
+    }, 
+    {
+        id: 2,
+        link: "https://www.youtube.com/embed/SzqMFSPxbHw?si=3V4ynetWc_tkENLL"
+    }, 
+    {
+        id: 3,
+        link: "https://www.youtube.com/embed/sxFl73MAZFM?si=ARxHMyMbZqnZLa9_"
+    }, 
+    {
+        id: 4,
+        link: "https://www.youtube.com/embed/W2rkSEm-OWQ?si=85dK-lN30g1o15-b"
+    }, 
+    {
+        id: 5,
+        link: "https://www.youtube.com/embed/rOOvAyiPxMk?si=HkM9TDJ4LDD4jeKQ"
+    }, 
+    {
+        id: 6,
+        link: "https://www.youtube.com/embed/oAdnd8s4gc0?si=ySQs6d2Qgnt8xe9U"
+    }, 
+    {
+        id: 7,
+        link: "https://www.youtube.com/embed/qLDNuDurzHs?si=bARWURY1JOAJ1fDh"
+    }, 
+    {
+        id: 8,
+        link: "https://www.youtube.com/embed/0eS90iy2D-Q?si=n40NoqTGSU7of6CD"
+    }
+
+    
+]
+
+export { articlesData, videos } 
