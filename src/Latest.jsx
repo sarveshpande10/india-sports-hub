@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 
 
-const Latest = ({ latestArticles, latestSport, setLatestSport }) => {
+const Latest = ({ latestArticles, category, setCategory }) => {
 
 
     const getFormattedDate = (dateString) => {
@@ -28,9 +28,16 @@ const Latest = ({ latestArticles, latestSport, setLatestSport }) => {
             <div className="outer">
                 <h2 className="section-heading">Latest</h2>
                 <div className="select-sports">
-                    <ul className>
+                    <ul>
                         { sports.map((sport) => (
-                            <li key={sport} id={(sport === "All Sports" && latestSport === "all") || sport.toLowerCase() === latestSport ? "active-latest-sport" : ""} onClick={() => setLatestSport(sport === "All Sports" ? "all" : sport.toLowerCase())}>{sport}</li>
+                            <li 
+                                key={sport} 
+                                id={
+                                    (sport === "All Sports" && category === "all") 
+                                    || sport.toLowerCase() === category ? "active-latest-sport" : ""} 
+                                    onClick={
+                                        () => setCategory(sport === "All Sports" ? "all" : sport.toLowerCase())}>
+                            {sport}</li>
                           ))
                         }
                     </ul>
@@ -59,12 +66,12 @@ const Latest = ({ latestArticles, latestSport, setLatestSport }) => {
 
                                     </ul>
                                     <div id="view-all">
-                                        <p><Link to={`/articles/${latestSport}`}>View All <FiArrowRight /></Link></p>
+                                        <p><Link to={`/articles/${category}`}>View All <FiArrowRight /></Link></p>
                                     </div>
                                 </div>
                             </> : 
                                 <div className="no-articles">
-                                    <h3>No {latestSport[0].toUpperCase() + latestSport.slice(1)} stories yet </h3>
+                                    <h3>No {category[0].toUpperCase() + category.slice(1)} stories yet </h3>
                                     <p>Nothing in this category right now. Try all articles or check back later.</p>
                                 </div>
                         }

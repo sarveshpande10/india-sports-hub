@@ -3,6 +3,7 @@ const ExploreVideos = ({ videos }) => {
         <div className="outer">
             <h2 className="section-heading">Explore Videos</h2>
             <div className="video-content">
+  
                 <ul>
                     {videos.map((video) => (
                         <li key={video.id} style={{listStyle: "none"}}>

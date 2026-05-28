@@ -1,4 +1,4 @@
-const articlesData = [
+const data = [
     {
         id: 1,
         title: "Four Indian Boxers Elevated to TOPS Core Group After Asian Championships Glory as India Eyes CWG and Asian Games Medals",
@@ -78,4 +78,4 @@ const videos = [
     
 ]
 
-export { articlesData, videos } 
+export { data, videos } 

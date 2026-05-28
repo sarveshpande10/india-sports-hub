@@ -1,4 +1,4 @@
-import { articlesData, videos } from './data'
+import { data, videos } from './data'
 import Layout from './Layout'
 import TopArticles from './TopArticles'
 import Trending from './Trending'
@@ -15,9 +15,9 @@ function App() {
   const [showMenu, setShowMenu] = useState(null)
   const [sportName, setSportName] = useState("Cricket")
   const [displayText, setDisplayText] = useState('')
-  const [article, setArticle] = useState(null)
-  const [data, setData] = useState(articlesData)
-  const [latestSport, setLatestSport] = useState("all")
+  const [article, setArticle] = useState(data[0])
+  // const [data, setData] = useState(articlesData)
+  const [category, setCategory] = useState("all")
   const [isSearching, setIsSearching] = useState(false)
   const [searchValue, setSearchValue] = useState('')
   const [activeSectionId, setActiveSectionId] = useState("home")
@@ -96,8 +96,8 @@ function App() {
   useEffect(() => {
 
     if (data.length === 0) return
-    setArticle(data[0])
-    const interval = setInterval(() => {
+    // setArticle(data[0])
+    const timeout = setTimeout(() => {
 
       setArticle(prev => {
 
@@ -109,11 +109,31 @@ function App() {
 
       })
 
-    }, 2000)
+    }, 4000)
 
-    return () => clearInterval(interval)
+    return () => clearTimeout(timeout)
 
-  }, [data])
+  }, [article])
+
+  const prevArticle = () => {
+    setArticle(prev => {
+      const currentIndex = data.findIndex(
+        article => article === prev
+      )
+
+      return currentIndex === 0 ? data[data.length-1] : data[currentIndex-1]
+    })
+  }
+
+  const nextArticle = () => {
+    setArticle(prev => {
+      const currentIndex = data.findIndex(
+        article => article === prev
+      )
+
+      return currentIndex === data.length-1 ? data[0] : data[currentIndex+1]
+    })
+  }  
 
 
 
@@ -140,28 +160,35 @@ function App() {
           <Route index element={
             <>
               { article && <TopArticles sportName={displayText} article={article} />}
-              { article && <Trending article={article} />}
+              { article 
+                  && <Trending 
+                        article={article} 
+                        prevArticle={prevArticle} 
+                        nextArticle={nextArticle} 
+                        index={data.indexOf(article)}
+                      />
+              }
               {data.length 
                 && <Latest 
                       latestArticles={
-                        latestSport === "all" ? data 
-                        : data.filter((article) => article.category.toLowerCase() === latestSport
+                        category === "all" ? data 
+                        : data.filter((article) => article.category.toLowerCase() === category
                         )} 
-                        latestSport={latestSport}
-                        setLatestSport={setLatestSport}
+                        category={category}
+                        setCategory={setCategory}
                     />
               }
               <ExploreVideos videos={videos} />
             </>
           }/>
 
-          <Route path='articles/:latestSport' element={
+          <Route path='articles/:category' element={
             <ArticlesBySport 
               latestArticles={
-                  latestSport === "all" ? data 
-                  : data.filter((article) => article.category.toLowerCase() === latestSport
+                  category === "all" ? data 
+                  : data.filter((article) => article.category.toLowerCase() === category
                   )} 
-              setLatestSport={setLatestSport}
+              setCategory={setCategory}
             />
           } />
 

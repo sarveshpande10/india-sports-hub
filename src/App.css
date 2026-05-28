@@ -207,9 +207,12 @@ nav > ul > li:hover svg {
 
 .top-articles {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
-  padding: 0 4rem;
+  /* padding: 0 4rem; */
+  align-items: center;
+  gap: 8rem;
+  /* background-color: green; */
 }
 
 .us {
@@ -244,7 +247,6 @@ nav > ul > li:hover svg {
   box-sizing: border-box;
   cursor: pointer;
   overflow-anchor: none;
-
 }
 
 .articles * {
@@ -253,6 +255,31 @@ nav > ul > li:hover svg {
 
 .datetime {
   font-size: 12px;
+}
+
+.arrows {
+  cursor: pointer;
+}
+
+.dots {
+  gap: 50px; 
+  display: flex; 
+  justify-content: center; 
+  margin-top: 70px; 
+}
+
+.dots div {
+  height: 15px;
+  width: 15px;
+  border: 2px solid white;
+  border-radius: 50%;
+  transition: 0.5s;
+}
+
+#current-article {
+  background-color: white;
+  width: 40px;
+  border-radius: 10px;
 }
 
 .section-heading {

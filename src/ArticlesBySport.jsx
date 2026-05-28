@@ -1,15 +1,13 @@
 import { useEffect } from "react"
 import { useParams } from "react-router-dom"
 
-const AllArticles = ({ latestArticles, setLatestSport }) => {
+const AllArticles = ({ latestArticles, setCategory }) => {
 
-    const {latestSport: sport} = useParams()
+    const {category} = useParams()
 
     useEffect(() => {
-        console.log("hello");
-        
-        setLatestSport(sport)        
-    }, [sport])
+        setCategory(category)        
+    }, [category])
 
     const getFormattedDate = (dateString) => {
         return new Date(dateString).toLocaleDateString('en-US', {
@@ -22,7 +20,7 @@ const AllArticles = ({ latestArticles, setLatestSport }) => {
     return (
         <>
             <div className="all-articles">
-                <h2>{sport === "all" ? "Articles" : latestArticles[0]?.category}</h2>
+                <h2>{category === "all" ? "Articles" : latestArticles[0]?.category}</h2>
                 <ul>
                     {latestArticles.map((article) => (
                         <li key={article.id} className="articles">
