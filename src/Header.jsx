@@ -2,7 +2,7 @@ import Nav from "./Nav"
 import Search from "./Search"
 import { MdSportsHandball } from "react-icons/md"
 
-const Header = ({ showMenu, setShowMenu, isSearching, setIsSearching, searchValue, setSearchValue, data, activeSectionId, setActiveSectionId }) => {
+const Header = ({ showMenu, setShowMenu, isSearching, setIsSearching, searchValue, setSearchValue, articleData, activeSectionId, setActiveSectionId }) => {
     return (
         <>
             <div className="header">
@@ -21,7 +21,7 @@ const Header = ({ showMenu, setShowMenu, isSearching, setIsSearching, searchValu
                     setIsSearching={setIsSearching} 
                     searchValue={searchValue} 
                     setSearchValue={setSearchValue} 
-                    data={data}
+                    articleData={articleData}
                 />
             </div>
         </>

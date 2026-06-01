@@ -1,7 +1,7 @@
 import Header from "./Header"
 import { Outlet } from 'react-router-dom' 
 
-const Layout = ({ showMenu, setShowMenu, isSearching, setIsSearching, searchValue, setSearchValue, data, activeSectionId, setActiveSectionId }) => {
+const Layout = ({ showMenu, setShowMenu, isSearching, setIsSearching, searchValue, setSearchValue, articleData, activeSectionId, setActiveSectionId }) => {
     return (
         <>
             <Header 
@@ -11,7 +11,7 @@ const Layout = ({ showMenu, setShowMenu, isSearching, setIsSearching, searchValu
                 setIsSearching={setIsSearching} 
                 searchValue={searchValue} 
                 setSearchValue={setSearchValue} 
-                data={data}
+                articleData={articleData}
                 activeSectionId={activeSectionId} 
                 setActiveSectionId={setActiveSectionId} 
             />

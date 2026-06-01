@@ -1,4 +1,3 @@
-import { data, videos } from './data'
 import Layout from './Layout'
 import TopArticles from './TopArticles'
 import Trending from './Trending'
@@ -6,22 +5,65 @@ import Latest from './Latest'
 import ArticlesBySport from './ArticlesBySport'
 import ScrollToTop from './ScrollToTop'
 import ExploreVideos from './ExploreVideos'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, use } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import './App.css'
 
 function App() {
 
+  const [articleData, setArticleData] = useState([])
+  const [videoData, setVideoData] = useState([])
   const [showMenu, setShowMenu] = useState(null)
   const [sportName, setSportName] = useState("Cricket")
   const [displayText, setDisplayText] = useState('')
-  const [article, setArticle] = useState(data[0])
-  // const [data, setData] = useState(articlesData)
+  const [article, setArticle] = useState(null)
   const [category, setCategory] = useState("all")
   const [isSearching, setIsSearching] = useState(false)
   const [searchValue, setSearchValue] = useState('')
   const [activeSectionId, setActiveSectionId] = useState("home")
 
+
+  useEffect(() => {
+
+    const fetchArticles = async () => {
+      try {
+        const response = await fetch('http://localhost:3500/data')
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok')
+        }
+
+        const result = await response.json()
+
+        setArticleData(result)
+        setArticle(result[0])
+
+      } catch (error) {
+        console.error('Error fetching data:', error.message)
+      } 
+    }
+
+    const fetchVideos = async () => {
+      try {
+        const response = await fetch('http://localhost:3500/videos')
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok')
+        }
+
+        const result = await response.json()
+
+        setVideoData(result)
+
+      } catch (error) {
+        console.error('Error fetching data:', error.message)
+      } 
+    }
+
+    fetchArticles()
+    fetchVideos()
+
+  }, [])
 
   const sports = [
             { id: 1, name: "Cricket" },
@@ -70,42 +112,19 @@ function App() {
 
   }, [sportName]);
 
-  // useEffect(() => {
-
-  // const fetchData = async () => {
-  //   try {
-  //     const response = await fetch('http://localhost:3000/list')
-
-  //     if (!response.ok) {
-  //       throw new Error('Network response was not ok')
-  //     }
-
-  //     const result = await response.json()
-
-  //     setData(result)
-
-  //   } catch (error) {
-  //     console.error('Error fetching data:', error.message)
-  //   } 
-  // }
-
-  // fetchData()
-
-  // }, [])
-
   useEffect(() => {
 
-    if (data.length === 0) return
+    if (articleData.length === 0) return
     // setArticle(data[0])
     const timeout = setTimeout(() => {
 
       setArticle(prev => {
 
-        const currentIndex = data.findIndex(
+        const currentIndex = articleData.findIndex(
           article => article === prev
         )
 
-        return data[(currentIndex + 1) % data.length]
+        return articleData[(currentIndex + 1) % articleData.length]
 
       })
 
@@ -117,25 +136,23 @@ function App() {
 
   const prevArticle = () => {
     setArticle(prev => {
-      const currentIndex = data.findIndex(
+      const currentIndex = articleData.findIndex(
         article => article === prev
       )
 
-      return currentIndex === 0 ? data[data.length-1] : data[currentIndex-1]
+      return currentIndex === 0 ? articleData[articleData.length-1] : articleData[currentIndex-1]
     })
   }
 
   const nextArticle = () => {
     setArticle(prev => {
-      const currentIndex = data.findIndex(
+      const currentIndex = articleData.findIndex(
         article => article === prev
       )
 
-      return currentIndex === data.length-1 ? data[0] : data[currentIndex+1]
+      return currentIndex === articleData.length-1 ? articleData[0] : articleData[currentIndex+1]
     })
   }  
-
-
 
 
 
@@ -152,7 +169,7 @@ function App() {
             setIsSearching={setIsSearching} 
             searchValue={searchValue} 
             setSearchValue={setSearchValue} 
-            data={data.filter((article) => article.title.toLowerCase().includes(searchValue.toLowerCase()))}
+            articleData={articleData.filter((article) => article.title.toLowerCase().includes(searchValue.toLowerCase()))}
             activeSectionId={activeSectionId} 
             setActiveSectionId={setActiveSectionId} 
           />}
@@ -165,28 +182,28 @@ function App() {
                         article={article} 
                         prevArticle={prevArticle} 
                         nextArticle={nextArticle} 
-                        index={data.indexOf(article)}
+                        index={articleData.indexOf(article)}
                       />
               }
-              {data.length 
+              {articleData.length 
                 && <Latest 
                       latestArticles={
-                        category === "all" ? data 
-                        : data.filter((article) => article.category.toLowerCase() === category
+                        category === "all" ? articleData 
+                        : articleData.filter((article) => article.category.toLowerCase() === category
                         )} 
                         category={category}
                         setCategory={setCategory}
                     />
               }
-              <ExploreVideos videos={videos} />
+              <ExploreVideos videoData={videoData} />
             </>
           }/>
 
           <Route path='articles/:category' element={
             <ArticlesBySport 
               latestArticles={
-                  category === "all" ? data 
-                  : data.filter((article) => article.category.toLowerCase() === category
+                  category === "all" ? articleData 
+                  : articleData.filter((article) => article.category.toLowerCase() === category
                   )} 
               setCategory={setCategory}
             />

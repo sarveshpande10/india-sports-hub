@@ -1,6 +1,6 @@
 import { CiSearch } from 'react-icons/ci'
 
-const Search = ({ isSearching, setIsSearching, searchValue, setSearchValue, data }) => {
+const Search = ({ isSearching, setIsSearching, searchValue, setSearchValue, articleData }) => {
 
   const getFormattedDate = (dateString) => {
       return new Date(dateString).toLocaleDateString('en-US', {
@@ -35,11 +35,11 @@ const Search = ({ isSearching, setIsSearching, searchValue, setSearchValue, data
     
       { isSearching &&
         <div className='search-suggestions' tabIndex={0} onBlur={() => setIsSearching(false)}>
-          { data.length == 0 ? 
+          { articleData.length == 0 ? 
               <p>No articles match that search.</p> :
 
               <ul>
-                {data.map((article) => (
+                {articleData.map((article) => (
                   <li key={article.id}>
                       <div className="upper-box">
                         <p style={
