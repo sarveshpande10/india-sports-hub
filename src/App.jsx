@@ -5,11 +5,16 @@ import Latest from './Latest'
 import ArticlesBySport from './ArticlesBySport'
 import ScrollToTop from './ScrollToTop'
 import ExploreVideos from './ExploreVideos'
+import Admin from './Admin'
+import ArticlesToUpdate from './ArticlesToUpdate'
+import AddOrEditForm from './AddOrEditForm'
 import { useState, useEffect, use } from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useNavigate } from 'react-router-dom'
 import './App.css'
 
 function App() {
+
+  const navigate = useNavigate()
 
   const [articleData, setArticleData] = useState([])
   const [videoData, setVideoData] = useState([])
@@ -21,44 +26,51 @@ function App() {
   const [isSearching, setIsSearching] = useState(false)
   const [searchValue, setSearchValue] = useState('')
   const [activeSectionId, setActiveSectionId] = useState("home")
+  const [newArticle, setNewArticle] = useState({
+    id: null,
+    title: "", 
+    article: "", 
+    date: new Date(), 
+    writer: "", 
+    category: ""
+  })
 
+  const fetchArticles = async () => {
+    try {
+      const response = await fetch('http://localhost:3500/data')
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok')
+      }
+
+      const result = await response.json()
+
+      setArticleData(result)
+      setArticle(result[0])
+
+    } catch (error) {
+      console.error('Error fetching data:', error.message)
+    } 
+  }
+
+  const fetchVideos = async () => {
+    try {
+      const response = await fetch('http://localhost:3500/videos')
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok')
+      }
+
+      const result = await response.json()
+
+      setVideoData(result)
+
+    } catch (error) {
+      console.error('Error fetching data:', error.message)
+    } 
+  }
 
   useEffect(() => {
-
-    const fetchArticles = async () => {
-      try {
-        const response = await fetch('http://localhost:3500/data')
-
-        if (!response.ok) {
-          throw new Error('Network response was not ok')
-        }
-
-        const result = await response.json()
-
-        setArticleData(result)
-        setArticle(result[0])
-
-      } catch (error) {
-        console.error('Error fetching data:', error.message)
-      } 
-    }
-
-    const fetchVideos = async () => {
-      try {
-        const response = await fetch('http://localhost:3500/videos')
-
-        if (!response.ok) {
-          throw new Error('Network response was not ok')
-        }
-
-        const result = await response.json()
-
-        setVideoData(result)
-
-      } catch (error) {
-        console.error('Error fetching data:', error.message)
-      } 
-    }
 
     fetchArticles()
     fetchVideos()
@@ -69,7 +81,7 @@ function App() {
             { id: 1, name: "Cricket" },
             { id: 2, name: "Badminton" },
             { id: 3, name: "Football" }
-        ];
+  ];
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -154,6 +166,83 @@ function App() {
     })
   }  
 
+  const addArticle = async (e) => {
+    e.preventDefault()
+    if (!newArticle.title) {
+      alert('Please fill in all fields!')
+      return
+    }
+
+    try {
+      const response = await fetch('http://localhost:3500/data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newArticle)
+      })
+      navigate('/admin')
+      fetchArticles()
+
+      if (!response.ok) {
+        throw new Error(`${response.status} ${response.statusText}`)
+      }
+      else {
+        alert("Article added successfully! ")
+      }
+
+    } catch (error) {
+      alert(`Error posting data: ${error.message}`)
+
+    } 
+  }
+
+  const editArticle = async (e) => {
+    e.preventDefault()
+    if (!newArticle.title) {
+      alert('Please fill in all fields!')
+      return
+    }
+
+    try {
+      const response = await fetch(`http://localhost:3500/data/${newArticle.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newArticle)
+      })
+
+      navigate('/admin')
+      fetchArticles()
+
+      if (!response.ok) {        
+        throw new Error(`${response.status} ${response.statusText}`)
+      } 
+      else {
+        alert("Article updated successfully! ")
+      }
+
+    } catch (error) {
+      alert(`Error posting data: ${error.message}`)
+    }
+  }
+
+  const handleDelete = async (id) => {
+
+    try {
+        const response = await fetch(`http://localhost:3500/data/${id}`, {
+            method: 'DELETE'
+        })
+        fetchArticles()
+        if (!response.ok) {
+            throw new Error(`${response.status} ${response.statusText}`)
+        }
+
+    } catch (error) {
+      alert(`Error posting data: ${error.message}`)
+    }
+  }
 
 
   return (
@@ -174,6 +263,7 @@ function App() {
             setActiveSectionId={setActiveSectionId} 
           />}
         >
+
           <Route index element={
             <>
               { article && <TopArticles sportName={displayText} article={article} />}
@@ -196,8 +286,8 @@ function App() {
                     />
               }
               <ExploreVideos videoData={videoData} />
-            </>
-          }/>
+            </>} 
+          />
 
           <Route path='articles/:category' element={
             <ArticlesBySport 
@@ -206,10 +296,63 @@ function App() {
                   : articleData.filter((article) => article.category.toLowerCase() === category
                   )} 
               setCategory={setCategory}
-            />
-          } />
-
+            />} 
+          />
         </Route>
+
+        <Route path='admin'>
+
+            <Route index element={<Admin setNewArticle={setNewArticle}/>} />
+
+            <Route path='add' element={
+              <AddOrEditForm 
+                newArticle={newArticle} 
+                setNewArticle={setNewArticle} 
+                functionName={addArticle} 
+              />} 
+            />
+            
+            <Route path='edit'>
+
+              <Route index element={
+                <ArticlesToUpdate 
+                  articleData={articleData} 
+                  setNewArticle={setNewArticle} 
+                  handleDelete={handleDelete}
+                />} 
+              />
+
+              <Route path=':id' element={
+                <AddOrEditForm 
+                  newArticle={newArticle} 
+                  setNewArticle={setNewArticle} 
+                  functionName={editArticle} 
+                />} 
+              />
+
+            </Route>
+
+            <Route path='delete'>
+              <Route index element={
+                <ArticlesToUpdate 
+                  articleData={articleData} 
+                  setNewArticle={setNewArticle} 
+                  handleDelete={handleDelete}
+                />} 
+              />
+
+              <Route path=':id' element={
+                <AddOrEditForm 
+                  newArticle={newArticle} 
+                  setNewArticle={setNewArticle} 
+                  functionName={editArticle} 
+                />} 
+              />
+
+            </Route>
+ 
+          </Route>
+          
       </Routes>
     </>
   )
