@@ -497,35 +497,6 @@ iframe:hover {
   text-decoration: underline;
 }
 
-#add-edit-form {
-  /* background-color: red; */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 40px;
-}
-
-#add-edit-form button {
-  width: fit-content;
-  height: 50px;
-  width: 130px;
-  font-size: larger;
-  background-color: #2e2c2c;
-  color: white;
-  cursor: pointer;
-}
-
-#add-edit-form div {
-  /* background-color: green; */
-  display: flex;
-  font-size: small;
-  padding: 10px;
-}
-
-#add-edit-form label {
-  margin-right: 10px;
-}
-
 .articles-list {
   /* background-color: red; */
   margin-top: 90px;
@@ -563,4 +534,84 @@ iframe:hover {
   display: flex;
   gap: 100px;
   /* background-color: red; */
+}
+
+.form-outer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: rgb(27, 22, 22);
+  min-height: 400px;
+  margin: 110px auto;
+  padding: 30px;
+  border: 2px solid white;
+  border-radius: 2%;
+  width: 400px;
+  box-shadow: 1px 1px 50px rgba(255, 255, 255, 0.3);
+
+}
+
+.form-outer form {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  /* background-color: green; */
+  gap: 20px;
+  height: 100%;
+  width: 100%;
+}
+
+.form-outer input, .form-outer textarea {
+  color: black;
+  background-color: white;
+  height: 40px;
+  border: none;
+  border-radius: 10px;
+  padding-left: 10px;
+  font-size: large;
+  border: 3px solid white;
+  
+}
+
+.form-outer input:focus, .form-outer textarea:focus {
+  border: 3px solid dodgerblue;
+  outline: none;
+  box-shadow: 7px 7px 10px black;
+
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.done-button {
+  height: 50px;
+  width: 130px;
+  font-size: larger;
+  background-color: #2e2c2c;
+  color: white;
+  cursor: pointer;
+  margin: 30px auto;
+  border: 2px solid white;
+  border-radius: 20px;
+}
+
+.done-button:hover {
+  background-color: #686161;
+}
+
+.form-outer > div {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  /* background-color: red; */
+  text-align: left;
+  margin-top: 10px;
+  padding: 3px;
+  font-size: small;
+}
+
+.form-outer > div a:hover {
+  text-decoration: underline;
 }

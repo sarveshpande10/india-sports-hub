@@ -8,6 +8,9 @@ import ExploreVideos from './ExploreVideos'
 import Admin from './Admin'
 import ArticlesToUpdate from './ArticlesToUpdate'
 import AddOrEditForm from './AddOrEditForm'
+import AdminLogin from './AdminLogin'
+import AdminRegister from './AdminRegister'
+import RequireAuth from './RequireAuth'
 import { useState, useEffect, use } from 'react'
 import { Routes, Route, useNavigate } from 'react-router-dom'
 import './App.css'
@@ -26,6 +29,11 @@ function App() {
   const [isSearching, setIsSearching] = useState(false)
   const [searchValue, setSearchValue] = useState('')
   const [activeSectionId, setActiveSectionId] = useState("home")
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [user, setUser] = useState({
+    username: '', 
+    password: ''
+  })
   const [newArticle, setNewArticle] = useState({
     id: null,
     title: "", 
@@ -299,10 +307,23 @@ function App() {
             />} 
           />
         </Route>
+        
+        <Route path="/admin/login" element={
+          <AdminLogin 
+            user={user} 
+            setUser={setUser} 
+            setIsLoggedIn={setIsLoggedIn} 
+          />} 
+        />
 
-        <Route path='admin'>
+        <Route path='/admin/register' element={<AdminRegister user={user} setUser={setUser} />} />
 
-            <Route index element={<Admin setNewArticle={setNewArticle}/>} />
+        {/* Protected Admin Area */}
+        <Route element={<RequireAuth isLoggedIn={isLoggedIn} />}>
+            
+          <Route path='admin'>
+
+            <Route index element={<Admin setNewArticle={setNewArticle} />} />
 
             <Route path='add' element={
               <AddOrEditForm 
@@ -350,9 +371,11 @@ function App() {
               />
 
             </Route>
- 
+
           </Route>
-          
+
+        </Route>
+        
       </Routes>
     </>
   )

@@ -6,10 +6,10 @@ const AddOrEditForm = ({ newArticle, setNewArticle, functionName }) => {
 
     return (
         <>
-            <div className="add-edit-wrapper" style={{margin: "70px"}}>
-                <form id="add-edit-form" onSubmit={functionName}>
+            <div className="form-outer" style={{width: "500px"}}>
+                <form onSubmit={functionName}>
                     
-                    <div className="input-div">
+                    <div className="input-group">
                         <label htmlFor="title">Title:</label>
                         <input 
                             type='text' 
@@ -21,7 +21,7 @@ const AddOrEditForm = ({ newArticle, setNewArticle, functionName }) => {
                         />
                     </div>
 
-                    <div className="input-div">
+                    <div className="input-group">
                         <label htmlFor="article">Article:</label>
                         <textarea 
                             id='article' 
@@ -32,7 +32,7 @@ const AddOrEditForm = ({ newArticle, setNewArticle, functionName }) => {
                         ></textarea>
                     </div>
 
-                    <div className="input-box">
+                    <div className="input-group">
                         <label htmlFor="writer">Writer:</label>
                         <input 
                             type='text'
@@ -44,7 +44,7 @@ const AddOrEditForm = ({ newArticle, setNewArticle, functionName }) => {
                         />
                     </div>
 
-                    <div className="input-box">
+                    <div className="input-group">
                         <label htmlFor="category">Category:</label>
                         <input 
                             type='text'
