@@ -2,7 +2,19 @@ import Nav from "./Nav"
 import Search from "./Search"
 import { MdSportsHandball } from "react-icons/md"
 
-const Header = ({ showMenu, setShowMenu, isSearching, setIsSearching, searchValue, setSearchValue, articleData, activeSectionId, setActiveSectionId }) => {
+const Header = (
+    { 
+        showMenu, 
+        setShowMenu, 
+        isSearching, 
+        setIsSearching, 
+        searchValue, 
+        setSearchValue, 
+        articleData, 
+        activeSectionId, 
+        setActiveSectionId 
+    }
+) => {
     return (
         <>
             <div className="header">

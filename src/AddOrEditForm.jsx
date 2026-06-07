@@ -55,7 +55,7 @@ const AddOrEditForm = ({ newArticle, setNewArticle, functionName }) => {
                             onChange={(e) => setNewArticle({ ...newArticle, category: e.target.value })}
                         />
                     </div>
-                    <button type="submit" form="add-edit-form" className="done-button">Publish <MdDone /></button>
+                    <button type="submit" className="done-button">Publish <MdDone /></button>
 
                 </form>
             </div>

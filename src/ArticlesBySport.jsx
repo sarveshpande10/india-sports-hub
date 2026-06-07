@@ -23,7 +23,7 @@ const AllArticles = ({ latestArticles, setCategory }) => {
                 <h2>{category === "all" ? "Articles" : latestArticles[0]?.category}</h2>
                 <ul>
                     {latestArticles.map((article) => (
-                        <li key={article.id} className="articles">
+                        <li key={article._id} className="articles">
                             <div className="upper-box">
                                 <p>{article.category}</p>
                                 <p className="datetime">{getFormattedDate(article.date)}</p>

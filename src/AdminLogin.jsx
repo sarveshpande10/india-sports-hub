@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom"
 import { useRef, useEffect } from "react"
 
-const AdminLogin = ({ user, setUser, setIsLoggedIn }) => {
+const AdminLogin = ({ user, setUser, setIsLoggedIn, setAccessToken }) => {
     const userRef = useRef()
     const navigate = useNavigate()
 
@@ -14,23 +14,26 @@ const AdminLogin = ({ user, setUser, setIsLoggedIn }) => {
         try {
             const response = await fetch('http://localhost:3500/login', {
                 method: 'POST', 
+                credentials: 'include', 
                 headers: {
                     'Content-type': 'application/json'
                 }, 
                 body: JSON.stringify(user)
             })
+
             setUser({
                 username: '',
                 password: ''
             })
-            if (!response.ok) {
-                throw new Error(`${response.status} ${response.statusText}`)
-            }
-            else {
-                console.log("succes123");
-                setIsLoggedIn(true)
-                navigate('/admin')
-            }
+
+            if (!response.ok) throw new Error(`${response.status} ${response.statusText}`)
+            
+            const data = await response.json()
+
+            console.log("succes123");
+            setIsLoggedIn(true)
+            setAccessToken(data.accessToken)
+            navigate('/admin')
 
         } catch(error) {
             alert(`Error Logging In: ${error.message}`)

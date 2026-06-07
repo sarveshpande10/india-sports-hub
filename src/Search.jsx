@@ -40,7 +40,7 @@ const Search = ({ isSearching, setIsSearching, searchValue, setSearchValue, arti
 
               <ul>
                 {articleData.map((article) => (
-                  <li key={article.id}>
+                  <li key={article._id}>
                       <div className="upper-box">
                         <p style={
                           {

@@ -29,13 +29,14 @@ function App() {
   const [isSearching, setIsSearching] = useState(false)
   const [searchValue, setSearchValue] = useState('')
   const [activeSectionId, setActiveSectionId] = useState("home")
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState('')
+  const [accessToken, setAccessToken] = useState('')
   const [user, setUser] = useState({
     username: '', 
     password: ''
   })
   const [newArticle, setNewArticle] = useState({
-    id: null,
+    _id: null,
     title: "", 
     article: "", 
     date: new Date(), 
@@ -64,7 +65,6 @@ function App() {
   const fetchVideos = async () => {
     try {
       const response = await fetch('http://localhost:3500/videos')
-
       if (!response.ok) {
         throw new Error('Network response was not ok')
       }
@@ -172,7 +172,25 @@ function App() {
 
       return currentIndex === articleData.length-1 ? articleData[0] : articleData[currentIndex+1]
     })
-  }  
+  }
+
+  const refresh = async () => {
+    const refreshResponse = await fetch('http://localhost:3500/refresh', {
+      credentials: 'include'
+    })
+    if(!refreshResponse.ok) {
+      if(refreshResponse.status === 403) {
+        alert('Session expired. Please login again.')
+        navigate('/admin/login')
+        return
+      }
+      else throw new Error(`${refreshResponse.status} ${refreshResponse.statusText}`)
+    }
+    const data = await refreshResponse.json()
+    setAccessToken(data.accessToken)
+
+    return data.accessToken
+  }
 
   const addArticle = async (e) => {
     e.preventDefault()
@@ -185,23 +203,35 @@ function App() {
       const response = await fetch('http://localhost:3500/data', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json', 
+          'Authorization': `Bearer ${accessToken}`
         },
         body: JSON.stringify(newArticle)
       })
+
+      if (!response.ok) {
+        if(response.status === 403) {
+          const newAccessToken = await refresh()
+          const retryResponse = await fetch('http://localhost:3500/data', {
+            method: 'POST', 
+            headers: {
+              'Content-Type': 'application/json', 
+              'Authorization': `Bearer ${newAccessToken}`
+            }, 
+            body: JSON.stringify(newArticle)
+          })
+          if(!retryResponse.ok) throw new Error(`${retryResponse.status} ${retryResponse.statusText}`)
+        }
+        else throw new Error(`${response.status} ${response.statusText}`)
+      }
+
+      alert("Article added successfully! ")
       navigate('/admin')
       fetchArticles()
 
-      if (!response.ok) {
-        throw new Error(`${response.status} ${response.statusText}`)
-      }
-      else {
-        alert("Article added successfully! ")
-      }
 
     } catch (error) {
-      alert(`Error posting data: ${error.message}`)
-
+        alert(`Error posting data: ${error.message}.\nPlease login again.`)
     } 
   }
 
@@ -213,26 +243,39 @@ function App() {
     }
 
     try {
-      const response = await fetch(`http://localhost:3500/data/${newArticle.id}`, {
+      const response = await fetch(`http://localhost:3500/data/${newArticle._id}`, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json', 
+          'Authorization': `Bearer ${accessToken}`
         },
         body: JSON.stringify(newArticle)
       })
 
+
+      if (!response.ok) {    
+        if(response.status === 403) {
+          const newAccessToken = await refresh()
+          const retryResponse = await fetch(`http://localhost:3500/data/${newArticle._id}`, {
+            method: 'PUT', 
+            headers: {
+              'Content-Type': 'application/json', 
+              'Authorization': `Bearer ${newAccessToken}`
+            }, 
+            body: JSON.stringify(newArticle)
+          })
+          if(!retryResponse.ok) throw new Error(`${retryResponse.status} ${retryResponse.statusText}`)
+
+        }
+        else throw new Error(`${response.status} ${response.statusText}`)
+      } 
+
+      alert("Article updated successfully! ")
       navigate('/admin')
       fetchArticles()
 
-      if (!response.ok) {        
-        throw new Error(`${response.status} ${response.statusText}`)
-      } 
-      else {
-        alert("Article updated successfully! ")
-      }
-
     } catch (error) {
-      alert(`Error posting data: ${error.message}`)
+      alert(`Error editing data: ${error.message}`)
     }
   }
 
@@ -240,15 +283,31 @@ function App() {
 
     try {
         const response = await fetch(`http://localhost:3500/data/${id}`, {
-            method: 'DELETE'
+            method: 'DELETE', 
+            headers: {
+              'Authorization': `Bearer ${accessToken}`
+            }
         })
-        fetchArticles()
+
         if (!response.ok) {
-            throw new Error(`${response.status} ${response.statusText}`)
+          if(response.status === 403) {
+            const newAccessToken = await refresh()
+            const retryResponse = await fetch(`http://localhost:3500/data/${id}`, {
+              method: 'DELETE', 
+              headers: {
+                'Authorization': `Bearer ${newAccessToken}`
+              }
+            })
+            if(!retryResponse.ok) throw new Error(`${retryResponse.status} ${retryResponse.statusText}`)
+
+          }
+          else throw new Error(`${response.status} ${response.statusText}`)
         }
 
+        fetchArticles()
+
     } catch (error) {
-      alert(`Error posting data: ${error.message}`)
+      alert(`Error deleting data: ${error.message}`)
     }
   }
 
@@ -266,7 +325,11 @@ function App() {
             setIsSearching={setIsSearching} 
             searchValue={searchValue} 
             setSearchValue={setSearchValue} 
-            articleData={articleData.filter((article) => article.title.toLowerCase().includes(searchValue.toLowerCase()))}
+            articleData={
+              articleData.filter(
+                (article) => article.title.toLowerCase().includes(searchValue.toLowerCase())
+              )
+            }
             activeSectionId={activeSectionId} 
             setActiveSectionId={setActiveSectionId} 
           />}
@@ -313,13 +376,20 @@ function App() {
             user={user} 
             setUser={setUser} 
             setIsLoggedIn={setIsLoggedIn} 
+            setAccessToken={setAccessToken}
           />} 
         />
 
         <Route path='/admin/register' element={<AdminRegister user={user} setUser={setUser} />} />
 
         {/* Protected Admin Area */}
-        <Route element={<RequireAuth isLoggedIn={isLoggedIn} />}>
+        <Route element={
+          <RequireAuth 
+          isLoggedIn={isLoggedIn} 
+          setIsLoggedIn={setIsLoggedIn} 
+          setAccessToken={setAccessToken}
+          />}
+        >
             
           <Route path='admin'>
 
